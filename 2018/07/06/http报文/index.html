@@ -14,7 +14,7 @@
   <meta name="description" content="负重前行,才懂得珍惜,点滴积累,能成就更多">
   <meta name="author" content="杨元兴">
   <meta name="keywords" content="前端">
-  <title>分类 ~ 个人博客</title>
+  <title>http报文 ~ 个人博客</title>
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
   <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
@@ -30,7 +30,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -90,7 +90,7 @@
 </nav>
 
     <div class="view intro-2"
-         style="background: url('/img/HC001.jpg')no-repeat center center;
+         style="background: url('/img/cherry_blossom_2012.jpg')no-repeat center center;
            background-size: cover;
            background-attachment: fixed;">
       <div class="full-bg-img">
@@ -100,6 +100,9 @@
               
             </span>
 
+            
+              <br>
+              <p>星期五, 七月 6日 2018, 6:13 晚上</p>
             
           </div>
 
@@ -115,22 +118,115 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5 z-depth-3" id="board">
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="py-5 z-depth-3" id="board">
+        <div class="post-content mx-auto">
+          <div class="markdown-body">
+            <h1 id="http"><a href="#http" class="headerlink" title="http"></a>http</h1><h3 id="主要特点"><a href="#主要特点" class="headerlink" title="主要特点"></a>主要特点</h3><ul>
+<li>无连接：请求完成就要断开</li>
+<li>无状态：下次再次请求，服务端不知道该次连接是不是当前用户。</li>
+</ul>
+<h3 id="报文"><a href="#报文" class="headerlink" title="报文"></a>报文</h3><pre><code>【请求报文】
+请求行：GET / /HTTP/1.1 （请求方式 请求路径 协议版本）
+请求头: 一堆key val
+空行
+请求体:数据部分
+
+
+
+【响应报文】
+状态行 HTTP/1.1 200 ok （协议版本 状态码 状态信息）
+响应头 一堆key val，里面有mime类型，告诉浏览器如何解析该资源
+空行
+响应体 就是我们请求的数据</code></pre><h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><pre><code>GET -----&gt; 获取资源
+POST -----&gt; 传输资源
+PUT -----&gt; 更新资源
+DELETE -----&gt; 删除资源
+HEAD -------&gt; 获取报文首部</code></pre><h3 id="post-amp-get"><a href="#post-amp-get" class="headerlink" title="post&amp;get"></a>post&amp;get</h3><pre><code>1.get在浏览器回退是无害的，post则再次提交数据
+2.GET的URL地址可被收藏，post no
+3.GET请求的资源会被缓存，POST no
+4.GET只能进行URL编码，post 多种
+5.GET的参数是长度限制2k,POST no
+6.GET在URL上传参，POST在请求报文的请求体上。</code></pre><h3 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h3><pre><code>1xx:请求已接收，继续操作
+
+2xx:成功
+200：请求成功
+206：带有Range头GET请求，带有范围的请求。
+
+3xx:重定向：重新指向到一个新的URL
+304：客服端发现有缓存文件，发出请求，服务端告诉客户端，该缓存还可以使用。
+
+4xx:服务端错误，语法错误或无法获取到
+400：客户端请求有语法错误，不能服务端理解
+403：被禁止访问
+404：no find
+
+5xx:服务器报错</code></pre><h3 id="持久链接"><a href="#持久链接" class="headerlink" title="持久链接"></a>持久链接</h3><ul>
+<li>HTTP无连接，请求完成就会断开。只是普通模式</li>
+<li>1.1版本：使用keep-alive持久连接，请求完成后继续请求，不会再次建立连接</li>
+</ul>
+<h3 id="管线化"><a href="#管线化" class="headerlink" title="管线化"></a>管线化</h3><ul>
+<li>持久连接,请求后不会断开：请求1–&gt;响应1–&gt;请求2–&gt;响应2，但不是说我请求1就回来1。而是 我这(请求123)打包请求，(响应123)打包回来。</li>
+<li>协议：1.1</li>
+<li>浏览器默认是不开启的</li>
+<li>要求对服务端对管线化的请求不失败即可。</li>
+</ul>
+
+            <hr>
+          </div>
+          <br>
+          <div>
+            
+              <p>
+                <i class="iconfont icon-inbox"></i>
                 
-
-<ul class="category-tree-list"><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/Es6语法/">Es6语法</a><span class="category-tree-list-count">1</span><ul class="category-tree-list-child"><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/Es6语法/ajax/">ajax</a><span class="category-tree-list-count">1</span></li></ul></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/ajax/">ajax</a><span class="category-tree-list-count">1</span><ul class="category-tree-list-child"><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/ajax/http协议/">http协议</a><span class="category-tree-list-count">1</span></li></ul></li><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/浏览器原理/">浏览器原理</a><span class="category-tree-list-count">3</span><ul class="category-tree-list-child"><li class="category-tree-list-item"><a class="category-tree-list-link" href="/categories/浏览器原理/通信/">通信</a><span class="category-tree-list-count">3</span></li></ul></li></ul>
-
-
-              </div>
-            </div>
+                  <a class="hover-with-bg" href="/categories/ajax">ajax</a>
+                  &nbsp;
+                
+                  <a class="hover-with-bg" href="/categories/http%E5%8D%8F%E8%AE%AE">http协议</a>
+                  &nbsp;
+                
+              </p>
+            
+            <p>
+              <i class="iconfont icon-tag"></i>
+              
+                <a class="hover-with-bg" href="/tags/%E5%89%8D%E7%AB%AF">前端</a>
+              
+            </p>
+            
+              <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://zh.wikipedia.org/wiki/Wikipedia:CC_BY-SA_3.0%E5%8D%8F%E8%AE%AE%E6%96%87%E6%9C%AC" rel="nofollow noopener">CC BY-SA 3.0协议</a> 。转载请注明出处！</p>
+            
           </div>
         </div>
       </div>
+    </div>
+    <div class="d-none d-lg-block col-lg-2 toc-container">
+      
+  <div id="toc">
+    <p class="h4"><i class="far fa-list-alt"></i>&nbsp;目录</p>
+    <div id="tocbot"></div>
+  </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- custom -->
+
+
+<!-- Comments -->
+<div class="col-lg-7 mx-auto nopadding-md">
+  <div class="container comments mx-auto" id="comments">
+    
+  </div>
+</div>
+
     
   </main>
 
@@ -184,6 +280,11 @@
   <script src="/js/lazyload.js" ></script>
 
 
+  
+    <script src="/lib/tocbot/tocbot.min.js" ></script>
+  
+  <script src="/js/post.js" ></script>
+
 
   <script src="/lib/prettify/prettify.min.js" ></script>
   <script>
@@ -199,7 +300,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "分类&nbsp;",
+        "http报文&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 60,

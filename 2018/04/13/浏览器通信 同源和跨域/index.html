@@ -14,7 +14,7 @@
   <meta name="description" content="负重前行,才懂得珍惜,点滴积累,能成就更多">
   <meta name="author" content="杨元兴">
   <meta name="keywords" content="前端">
-  <title>浏览器存储 ~ 个人博客</title>
+  <title>通信类(同源与跨域) ~ 个人博客</title>
   <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
   <link rel="stylesheet" href="/lib/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/lib/mdbootstrap/css/mdb.min.css">
@@ -102,7 +102,7 @@
 
             
               <br>
-              <p>星期二, 十一月 27日 2018, 11:28 晚上</p>
+              <p>星期五, 四月 13日 2018, 11:10 晚上</p>
             
           </div>
 
@@ -127,44 +127,151 @@
       <div class="py-5 z-depth-3" id="board">
         <div class="post-content mx-auto">
           <div class="markdown-body">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在做项目的过程中，我们经常遇到需要把信息存储在本地的情况，比如权限验证token、用户信息、埋点计数、客户配置的皮肤信息或语言种类等，我们可以暂存一下避免浏览器不必要的请求和客户多余操作，给客户使用带来方便。</p>
-<p>那么浏览器存储有哪些方法呢，主要有<strong>cookie</strong>、<strong>localStorage</strong>、<strong>sessionStorage</strong></p>
-<p><strong>cookie</strong>属于文档对象模型DOM树根节点document，而 <strong>sessionStorage</strong> 和 <strong>localStorage</strong> 属于浏览器对象模型BOM的对象window.</p>
-<p>其中 <strong>sessionStorage</strong> 和 <strong>localStorage</strong> 是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API" target="_blank" rel="noopener">HTML5 Web Storage API</a> 提供的.</p>
-<ul>
-<li><strong>sessionStorage：</strong>为每一个给定的源（given origin）维持一个独立的存储区域，该存储区域在页面会话期间可用（即只要浏览器处于打开状态，包括页面重新加载和恢复）</li>
-<li><strong>localStorage：</strong>同样的功能，但是在浏览器关闭，然后重新打开后数据仍然存在。</li>
+            <h1 id="通信类-同源与跨域"><a href="#通信类-同源与跨域" class="headerlink" title="通信类(同源与跨域)"></a>通信类(同源与跨域)</h1><h3 id="什么是同源策略及限制"><a href="#什么是同源策略及限制" class="headerlink" title="什么是同源策略及限制"></a>什么是同源策略及限制</h3><pre><code>源：HTTP协议、IP、端口。
+限制:不是一个源的文档，没有权力操作另外一个源的文档。
+方面：
+1.无法操作cookie.localStorage和indexDB
+2.DOM无法获取
+3.AJAX不能发送</code></pre><h3 id="前后端是如何通信的"><a href="#前后端是如何通信的" class="headerlink" title="前后端是如何通信的"></a>前后端是如何通信的</h3><ul>
+<li>ajax:同源下的通信</li>
+<li>websocket:不受同源策略的限制</li>
+<li>CORS：支持同源，也支持跨域。</li>
 </ul>
-<h2 id="1-cookie"><a href="#1-cookie" class="headerlink" title="1. cookie"></a>1. cookie</h2><p>h5之前，存储主要用cookies，缺点是在请求头上带着数据，导致流量增加。大小限制<code>4k</code>.</p>
-<p>操作方式：</p>
-<pre><code>document.cookie = &quot;username=John Doe; expires=Thu, 18 Dec 2013 12:00:00 GMT; path=/&quot;    // 设置cookie
-document.cookie = &quot;username=; expires=Thu, 01 Jan 1970 00:00:00 GMT&quot;    // 删除cookie</code></pre><p>设置cookie的方法比较简单，其中有几个参数可以添加.</p>
-<h3 id="expires"><a href="#expires" class="headerlink" title="expires"></a>expires</h3><p><strong>过期时间</strong>，当过了到期日期时，浏览器会自动删除该cookie，如果想删除一个cookie，只需要把它过期时间设置成过去的时间即可.比如希望设置过期时间一年：<code>new Date().getTime() + 365 * 24 * 60 * 60 * 1000</code></p>
-<p>如果不设置过期时间，则表示这个cookie生命周期为浏览器会话期间，只要关闭浏览器窗口，cookie就消失了。</p>
-<h3 id="path"><a href="#path" class="headerlink" title="path"></a>path</h3><p><strong>路径</strong>，值可以是一个目录，或者是一个路径。</p>
-<p>如果cc.com/test/index.html 建立了一个cookie，那么在cc.com/test/目录里的所有页面，以及该目录下面任何子目录里的页面都可以访问这个cookie。因此在cc.com/test/test2/test3 里的任何页面都可以访问cc.com/test/index.html建立的cookie。若cc.com/test/ 若想访问cc.com/test/index.html设置的cookes，需要把cookies的path属性设置成“/”。<br>在指定路径的时候，凡是来自同一服务器，URL里有相同路径的所有WEB页面都可以共享cookies。</p>
-<h3 id="domain"><a href="#domain" class="headerlink" title="domain"></a>domain</h3><p><strong>主机名</strong>，是指同一个域下的不同主机，例如：<a href="http://www.baidu.com和map.baidu.com就是两个不同的主机名。默认情况下，一个主机中创建的cookie在另一个主机下是不能被访问的，但可以通过domain参数来实现对其的控制：`document.cookie" target="_blank" rel="noopener">www.baidu.com和map.baidu.com就是两个不同的主机名。默认情况下，一个主机中创建的cookie在另一个主机下是不能被访问的，但可以通过domain参数来实现对其的控制：`document.cookie</a> = “name=value;domain=.baidu.com”`.<br>这样，所有*.baidu.com的主机都可以访问该cookie。</p>
-<h2 id="2-localStorage"><a href="#2-localStorage" class="headerlink" title="2. localStorage"></a>2. localStorage</h2><p>以键值对(Key-Value)的方式存储，永久存储，永不失效，除非手动删除。IE8+支持，每个域名限制<code>5M.</code></p>
-<p>打开同域的新页面也能访问得到</p>
-<p>操作方式：</p>
-<pre><code>window.localStorage.username = &#39;hehe&#39;                   // 设置
-window.localStorage.setItem(&#39;username&#39;, &#39;hehe&#39;)         // 设置
-window.localStorage.getItem(&#39;username&#39;)                 // 读取
-window.localStorage.removeItem(&#39;username&#39;)             // 删除
-window.localStorage.key(1)                             // 读取索引为1的值
-window.localStorage.clear()                            // 清除所有</code></pre><p>可以存储数组、数字、对象等<strong>可以被序列化为字符串</strong>的内容.</p>
-<h2 id="3-sessionStorage"><a href="#3-sessionStorage" class="headerlink" title="3. sessionStorage"></a>3. sessionStorage</h2><p>sessionStorage操作的方法与localStroage是一样的，区别在于 sessionStorage 在关闭页面后即被清空，而 localStorage 则会一直保存。很多时候数据只需要在用户浏览一组页面期间使用，关闭窗口后数据就可以丢弃了，这种情况使用sessionStorage就比较方便。</p>
-<p>注意，刷新页面sessionStorage不会清除，但是打开同域新页面访问不到.</p>
-<h2 id="4-cookie、localStorage、sessionStorage之间的区别"><a href="#4-cookie、localStorage、sessionStorage之间的区别" class="headerlink" title="4. cookie、localStorage、sessionStorage之间的区别"></a>4. cookie、localStorage、sessionStorage之间的区别</h2><p>他们都是保存在浏览器端的存储方式，他们之间的区别：</p>
-<ol>
-<li>cookie数据始终在同源的http请求中携带（即使不需要），即cookie在浏览器和服务器间来回传递。而sessionStorage和localStorage不会自动把数据发给服务器，仅在本地保存。cookie数据还有路径（path）的概念，可以限制cookie只属于某个路径下。</li>
-<li><strong>存储大小限制</strong>不同，cookie数据不能超过4k，同时因为每次http请求都会携带cookie，所以cookie只适合保存很小的数据，如会话标识。sessionStorage和localStorage 虽然也有存储大小的限制，但比cookie大得多，可以达到5M或更大。</li>
-<li><strong>数据有效期</strong>不同，sessionStorage：仅在当前浏览器窗口关闭前有效，自然也就不可能持久保持；localStorage：始终有效，窗口或浏览器关闭也一直保存，因此用作持久数据；cookie只在设置的cookie过期时间之前一直有效，即使窗口或浏览器关闭。</li>
-<li><strong>作用域</strong>不同，sessionStorage不在不同的浏览器页面中共享，即使是同一个页面；localStorage 在所有同源窗口中都是共享的；cookie也是在所有同源窗口中都是共享的。</li>
-<li>Web Storage 支持事件通知机制，可以将数据更新的通知发送给监听者。</li>
-<li>Web Storage 的 api 接口使用更方便，cookie的原生接口不友好，需要自己封装。</li>
-</ol>
-<h2 id="5-安全性"><a href="#5-安全性" class="headerlink" title="5. 安全性"></a>5. 安全性</h2><p>需要注意的是，不是什么数据都适合放在 Cookie、localStorage 和 sessionStorage 中的，因为它们保存在本地容易被篡改，使用它们的时候，需要时刻注意是否有代码存在 XSS 注入的风险。所以千万不要用它们存储你系统中的敏感数据。        </p>
+<h3 id="如何创建ajax"><a href="#如何创建ajax" class="headerlink" title="如何创建ajax"></a>如何创建ajax</h3><pre><code>【拿到xhr】
+var httpobj = null;
+try {
+  httpobj = new ActiveXObject(&quot;Msxml2.XMLHTTP&quot;);
+}
+// 
+catch (e) {
+  try {
+    httpobj = new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
+  }
+  // 
+  catch (e1) {
+    httpobj = new XMLHttpRequest();
+  }
+}
+var xhr = httpobj;
+
+// 开启
+xhr.open(&quot;post&quot;, &quot;xxx&quot;, true);
+// 设置请求头
+xhr.setRequestHeader(&quot;Content-Type&quot;, &quot;application/x-www-form-urlencoded;&quot;);
+
+// 拼接数据
+var content = &#39;&#39;;
+for (var key in daya) {
+  content += key + &#39;=&#39; + daya[key] + &#39;&amp;&#39;;
+}
+content = content.slice(0, content.length - 1);
+
+// 发送
+xhr.send(content);
+
+// 响应：
+// xhr.onreadystatechange
+xhr.onload = function() { 
+  // xhr.status == 200||xhr.status == 304||xhr.status == 206
+  if (xhr.readyState == 4 &amp;&amp; xhr.status == 200) {
+    JSON.parse(xhr.responseText)
+  }
+};</code></pre><ul>
+<li>axios请求的设置</li>
+</ul>
+<pre><code>【1】
+前端：
+axios默认的请求内容类型：Content-Type: application/json;charset=UTF-8
+
+后台：
+app.use(bodyParser.json());
+
+【2】
+前端：
+axios.defaults.headers.post[&#39;Content-Type&#39;] = &#39;application/x-www-form-urlencoded
+let param = new URLSearchParams();
+param.append(&#39;name&#39;, me.obj.name);
+param.append(&#39;ps&#39;, me.obj.ps);
+me.$ajax({data: param})
+
+后台：
+app.use(bodyParser.urlencoded({ extended: false }));</code></pre><h3 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h3><ul>
+<li>JSONP：非正式传输协议。</li>
+<li>发现凡是拥有”src”这个属性的标签都拥有跨域的能力，比如<code>&lt;script&gt;、&lt;img&gt;、&lt;iframe&gt;</code>;</li>
+<li>就是本地写好回调函数，动态生成一个script标签，写入src的路径把函数名传过去，说到底回来的脚本，里面执行的代码就是执行这个函数。相当于是异步加载JS，异步执行我们已经写好的回调函数。</li>
+<li>ajax和jsonp其实本质上是不同的东西。ajax的核心是通过XmlHttpRequest获取非本页内容，而jsonp的核心则是动态添加script标签来调用服务器提供的js脚本。</li>
+</ul>
+<pre><code>// 得到航班信息查询结果后的回调函数
+var flightHandler = function(data){
+    alert(&#39;你查询的航班结果是：票价 &#39; + data.price + &#39; 元，&#39; + &#39;余票 &#39; + data.tickets + &#39; 张。&#39;);
+};
+
+// 提供jsonp服务的url地址（不管是什么类型的地址，最终生成的返回值都是一段javascript代码）
+var url = &quot;http://flightQuery.com/jsonp/flightResult.aspx?code=CA1998&amp;callback=flightHandler&quot;;
+
+// 创建script标签，设置其属性
+var script = document.createElement(&#39;script&#39;);
+script.setAttribute(&#39;src&#39;, url);
+
+// 把script标签加入head，此时调用开始
+document.getElementsByTagName(&#39;head&#39;)[0].appendChild(script);</code></pre><ul>
+<li>hash:就是<a href="http://www.baidu.com/#号后面的值，改变时不会刷新页面的。" target="_blank" rel="noopener">www.baidu.com/#号后面的值，改变时不会刷新页面的。</a></li>
+<li>(<a href="http://www.baidu.com/?search=10,改变search后面的值页面就会刷新。" target="_blank" rel="noopener">www.baidu.com/?search=10,改变search后面的值页面就会刷新。</a>)</li>
+<li>实现：A页面里,通过iframe引入B页面。在A页面的JS拿到B的iframe的src,修改值。在B页面的JS内写onhashchange的响应函数，拿到A传的数据</li>
+</ul>
+<pre><code>【A页面】
+var iframe_b = document.getElementById(&#39;iframe_b&#39;);
+iframe_b.src = iframe_b.src + &#39;#user=admin&#39;;
+
+【B页面】监听
+window.onhashchange = function () {
+    var data = window.location.hash;
+};</code></pre><ul>
+<li>postMessage:H5中东西</li>
+</ul>
+<pre><code>【A页面】
+window.postMessage(data,&quot;http://B.html&quot;);
+
+【B页面】
+window.addEventListener(&quot;message&quot;,function(ev){
+  ev.origin // http://A.html
+  ev.source // A页面的window
+  ev.data. 
+},false);</code></pre><ul>
+<li>WebSocket: 我们使用Socket.io，它很好地封装了webSocket接口，提供了更简单、灵活的接口，也对不支持webSocket的浏览器提供了向下兼容。</li>
+<li>CORS:通信标准。可理解为支持跨域通信的AJAX。浏览器在识别发送一个跨域请求时，会在头部加一个orgin，支持跨域通信。</li>
+</ul>
+<pre><code>res.writeHead(200, {
+    &quot;Content-Type&quot;: &quot;text/html; charset=UTF-8&quot;,
+    &quot;Access-Control-Allow-Origin&quot;:&#39;http://localhost&#39;,
+    &#39;Access-Control-Allow-Methods&#39;: &#39;GET, POST, OPTIONS&#39;,
+    &#39;Access-Control-Allow-Headers&#39;: &#39;X-Requested-With, Content-Type&#39;
+});
+
+app.all(&#39;*&#39;, function(req, res, next) {
+    res.header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;);
+    res.header(&quot;Access-Control-Allow-Headers&quot;, &quot;X-Requested-With,Content-Type&quot;);
+    res.header(&quot;Access-Control-Allow-Methods&quot;,&quot;PUT,POST,GET,DELETE,OPTIONS&quot;);
+    next();
+});</code></pre><ul>
+<li>前端webpack/browserify设置服务代理</li>
+</ul>
+<h3 id="敲入URL发生的事情"><a href="#敲入URL发生的事情" class="headerlink" title="敲入URL发生的事情"></a>敲入URL发生的事情</h3><ul>
+<li>1.用户输入URL地址</li>
+<li>2.浏览器解析URL解析出主机名</li>
+<li>3.浏览器将主机名转换成服务器ip地址（浏览器先查找本地DNS缓存列表 没有的话 再向浏览器默认的DNS服务器发送查询请求 同时缓存）</li>
+<li>4.浏览器将端口号从URL中解析出来</li>
+<li>5.浏览器建立一条与目标Web服务器的TCP连接（三次握手）</li>
+<li>6.浏览器向服务器发送一条HTTP请求报文</li>
+<li>7.服务器向浏览器返回一条HTTP响应报文</li>
+<li>8.关闭连接 浏览器解析文档</li>
+<li>9.如果文档中有资源 重复6 7 8 动作 直至资源全部加载完毕</li>
+</ul>
+<h3 id="TCP连接三次握手"><a href="#TCP连接三次握手" class="headerlink" title="TCP连接三次握手"></a>TCP连接三次握手</h3><ul>
+<li>A:我说的话，你听见了么？</li>
+<li>B：听见了，我说的你听见了么？（回复A的问题，提出自己的问题）；</li>
+<li>A：听见了，我们开始说话吧。</li>
+</ul>
 
             <hr>
           </div>
@@ -289,7 +396,7 @@ window.localStorage.clear()                            // 清除所有</code></p
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "浏览器存储&nbsp;",
+        "通信类(同源与跨域)&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 60,
